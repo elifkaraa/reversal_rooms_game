@@ -34,7 +34,7 @@ Level2 de hem karakerimiz hem de engel hareket ediyor. Kimin ne yaptığının b
 Level3 de ise kapı nesnesi hareket ediyor. Engele değmeden karakterin kapıya ulaştırılması gerekir.
 
 ## Oynanış Videosu 
-Oynama videosuna alttaki linkten erişebilirsin:
+Oynama videosuna alttaki linkten erişilebilir:  
 https://youtu.be/YyPJpJm4z-o
 ## Kullanılan Teknolojiler
 - HTML5 Canvas
