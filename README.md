@@ -35,6 +35,7 @@ Level3 de ise kapı nesnesi hareket ediyor. Engele değmeden karakterin kapıya 
 
 ## Oynanış Videosu 
 Oynama videosuna alttaki linkten erişebilirsin:
+https://youtu.be/YyPJpJm4z-o
 ## Kullanılan Teknolojiler
 - HTML5 Canvas
 - JavaScript
