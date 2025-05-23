@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Reversal Rooms</title>
+    <style>
+        body{
+            display: flex;
+            justify-content: center; /* Yatay ortalama */
+            align-items: center;
+            background-color:rgb(187, 208, 218) ;
+        }
+        #gameContainer {
+            position:fixed;
+            max-width: 640px;
+            width: 100%;
+            margin: auto;
+        }
+         
+        #startButton {
+            justify-content: center; 
+            display: flex;
+            align-items: center;
+            margin-left: 250px;
+            padding: 20px 20px;
+            font-size: 20px;
+            background-color:#7095c9;
+            color: white;
+            border:none;
+            border-radius: 5px;
+        }
+        #startButton:hover {
+            background-color:#829eb6;
+        }
+        .yönerge{
+            position:absolute;
+            top:250px; 
+            left:20px;
+            color:#5a2b2b;
+            font-family:Georgia, serif;
+            font-size:14px;
+            
+        }
+        </style>
+</head>
+<body>
+   
+    <div id="gameContainer">
+        
+        <button id="startButton">Oyuna Başla</button>
+    </div>
+    <div class="yönerge">
+        <p>CONTROLS (KEYBOARD)</p>
+        <p>Movement : ← / → </p>
+        <p>Jump: ↑</p>
+    </div>
+    <script>
+        let currentScreen = "start"; 
+let gameFinish=false;
+let startImage=new Image();
+startImage.src="assets/görsel/cloud-preview (1).png";
+let myGamePiece; //karakterimiz
+let myBackground; //arkaplan
+var myObstacle; // kapı nesnesi
+var myObstacle2; // kaktüs(engel) nesnesi
+let gravity=0.5; 
+let gravityY=0.20; 
+let velocityY=0;
+let isJumping=false;
+const jumpHeight =80; //zıplayabileceği yükseklik miktarı
+let obstacle2VelocityY= 0;
+let obstacle2IsJumping=false;
+let obstacle2JumpHeight=90;
+let obstacleVelocityX=1.5;
+let obstacleVelocityY= 0;
+let obstacleIsJumping=false;
+let obstacleDirection = 1; 
+let obstacleJumpHeight=70;
+const maxY=445;
+let level=1;
+let mySound ;
+let jumpSound = new Audio("assets/sesler/cartoon-jump-6462.mp3"); //zıpladığında çıkaracağı ses
+let deathSound = new Audio("assets/sesler/genickbruch-107521.mp3"); //engele çarptığında çıkaracağı ses
+
+
+function startGame() { //Oyunumuzu başlatan fonksiyon
+    myGameArea.start();
+    mySound = new Audio("assets/sesler/broken_metronome.wav");
+    mySound.loop = true;      
+    mySound.volume = 0.5;
+    mySound.play();
+    myGamePiece = new component(50, 50, "assets/görsel/sağakosma.png", 10, maxY, "image");
+    myObstacle = new component(40,50, "assets/görsel/pixel_door.png", 570,395,"image");
+    myObstacle2 = new component(40,30, "assets/görsel/cactus.png", 400,415,"image");
+    myBackground = new component(700, 500, "assets/görsel/Full-background.png", 0, 0, "image");
+   
+}
+
+const myGameArea = { //Oyun alanımızı oluşturuyoruz
+    canvas: document.createElement("canvas"),
+    start: function () {
+        this.canvas.width = 700;
+        this.canvas.height = 500;
+        this.context = this.canvas.getContext("2d");
+        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        this.interval = setInterval(updateGameArea, 20);
+        window.addEventListener('keydown', function (e) {
+            myGameArea.keys = (myGameArea.keys || []);
+            myGameArea.keys[e.keyCode] = true;
+        });
+        window.addEventListener('keyup', function (e) {
+            myGameArea.keys[e.keyCode] = false;
+        });
+    },
+    clear: function () {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+};
+
+function component(width, height, color, x, y, type) {
+    this.type = type;
+    if (type === "image") {
+        this.image = new Image();
+        this.image.src = color;
+    }
+    this.width = width;
+    this.height = height;
+    this.speedX = 0;
+    this.x = x;
+    this.y = y;
+
+    this.update = function () {
+        if (this.type === "image") {
+            const ctx = myGameArea.context;
+            ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+        }
+    };
+
+    this.newPos = function () {
+        this.x += this.speedX; //eksende yaptığı hıza(harekete) göre konumunu değiştirir
+        this.y += velocityY;
+        velocityY += gravity;
+        if (this.y + this.height >= maxY) {
+            this.y = maxY - this.height;
+            velocityY = 0;
+            isJumping = false;
+            this.image.src = "assets/görsel/sağakosma.png";
+        }
+        if (this.x < 0) this.x = 0;
+        if (this.x + this.width > myGameArea.canvas.width) {
+            this.x = myGameArea.canvas.width - this.width;
+        }
+    };
+}
+
+function updateGameArea() {
+ 
+    myGameArea.clear(); //oyun alanını temizler
+    if (currentScreen=="gameOver") {
+        showGameOverScreen();
+        return;
+    }
+    if (currentScreen=="start") {
+        showStartScreen();
+        return; 
+    }
+
+    if (currentScreen=="level1") {
+    myBackground.update();
+    myObstacle.update();
+    myObstacle2.update();
+    if (level == 1) {
+        myGamePiece.speedX = 0;
+    if (myGameArea.keys && myGameArea.keys[37]) { //basılan ok tuslarına göre hareketi sağlar ve görsellerle destekler
+        myGamePiece.speedX = -2.5;
+        myGamePiece.image.src = "assets/görsel/solakosma.png";
+    }
+
+
+    if (myGameArea.keys && myGameArea.keys[39]) {
+        myGamePiece.speedX = 2.5;
+        myGamePiece.image.src = "assets/görsel/sağakosma.png";
+    }
+
+    
+    if (myGameArea.keys && myGameArea.keys[38]) {
+        if (!isJumping && myGamePiece.y + myGamePiece.height >= maxY) {
+            velocityY = -Math.sqrt(2 * gravity * jumpHeight);
+            isJumping = true;
+            jumpSound.play();
+            myGamePiece.image.src = "assets/görsel/zıplama.png";
+        }
+    }
+} 
+     if(level==2){ //level2 de karakter değilde engel zıplama hareketi yaptığı için if ile level1 ve level2 yi ayırdık
+        myGamePiece.speedX = 0;
+        if (myGameArea.keys && myGameArea.keys[37]) { //basılan ok tuslarına göre hareketi sağlar ve görsellerle destekler
+        myGamePiece.speedX = -2.5;
+        myGamePiece.image.src = "assets/görsel/solakosma.png";
+    }
+        if (myGameArea.keys && myGameArea.keys[39]) {
+        myGamePiece.speedX = 2.5;
+        myGamePiece.image.src = "assets/görsel/sağakosma.png";
+    }
+        if (myGameArea.keys && myGameArea.keys[38]) {
+        if (!obstacle2IsJumping && myObstacle2.y + myObstacle2.height >= maxY) {
+                obstacle2VelocityY = -Math.sqrt(2 * gravityY * obstacle2JumpHeight);
+                obstacle2IsJumping = true;
+                jumpSound.play();
+            }
+    }
+        myObstacle2.y += obstacle2VelocityY;
+        obstacle2VelocityY += gravityY;
+        if (myObstacle2.y + myObstacle2.height >= maxY) {
+            myObstacle2.y = maxY - myObstacle2.height;
+            obstacle2VelocityY = 0;
+            obstacle2IsJumping = false;
+        }
+    }
+    if(level==3){ //level3de de  sadece kapı hareket ettiği için bunu da ayrı bir if e yazdık 
+        myObstacle.speedX = 0;
+        if (myGameArea.keys && myGameArea.keys[37]) { //basılan ok tuslarına göre hareketi sağlar ve görsellerle destekler
+        myObstacle.speedX = -2.5;
+    }
+        if (myGameArea.keys && myGameArea.keys[39]) {
+        myObstacle.speedX = 2.5;
+    }
+        if (myGameArea.keys && myGameArea.keys[38]) {
+            if (!obstacleIsJumping && myObstacle.y + myObstacle.height >= maxY) {
+                obstacleVelocityY = -Math.sqrt(2 * gravityY * obstacleJumpHeight);
+                obstacleIsJumping = true;
+                jumpSound.play();
+            }
+        }
+        myObstacle.x += myObstacle.speedX;
+        myObstacle.y += obstacleVelocityY;
+        obstacleVelocityY += gravityY;
+        
+        
+        if (myObstacle.y + myObstacle.height >= maxY) {
+            myObstacle.y = maxY - myObstacle.height;
+            obstacleVelocityY = 0;
+            obstacleIsJumping = false;
+        }
+        }
+        
+    myGamePiece.newPos();
+    if (crashWith(myGamePiece,myObstacle2)) {
+        deathSound.pause();
+        deathSound.currentTime = 0;
+        deathSound.play().catch(e => {
+            console.error("Ses çalınamadı:", e);
+        });
+        setTimeout(() => restartGame(), 500);
+        return;
+    }
+    myGamePiece.update();
+    if (crashWith(myGamePiece,myObstacle)) {
+        if (level==1) {
+            nextLevel();
+        }
+         else if (level==2) {
+            nextLevel();
+        }
+        else if(level==3){
+            currentScreen = "gameOver";
+        }
+    }
+    if (level === 3 && crashWith(myObstacle, myObstacle2)) {
+    deathSound.pause();
+    deathSound.currentTime = 0;
+    deathSound.play().catch(e => {
+        console.error("Ses çalınamadı:", e);
+    });
+    setTimeout(() => {
+        
+        restartGame();
+    }, 500);
+    return;
+}
+    
+    if(level==1){
+    const ctx = myGameArea.context;
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "black";
+    ctx.fillText("Level 1", 10, 20);
+    ctx.fillText("ROOM A JUMP", 10, 40);
+    }
+    if(level==2){
+    const ctx = myGameArea.context;
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "black";
+    ctx.fillText("Level 2", 10, 20);
+    ctx.fillText("ROOM B JUMP ?", 10, 40);
+
+    }
+    if(level==3){
+        const ctx = myGameArea.context;
+        ctx.font = "16px Arial";
+        ctx.fillStyle = "black";
+        ctx.fillText("Level 3", 10, 20);
+        ctx.fillText("ROOM C ROLES REVERSED", 10, 40);
+    
+    }
+}
+}
+function crashWith(obj1,obj2) {
+    return !(
+        obj1.y + obj1.height < obj2.y ||
+        obj1.y > obj2.y + obj2.height ||
+        obj1.x + 20 <obj2.x ||
+        obj1.x > obj2.x + obj2.width
+    );
+}
+function restartGame() {
+    currentScreen = "level1";
+    if(level==1){
+        myGamePiece = new component(50, 50, "assets/görsel/sağakosma.png", 10, maxY, "image");
+        myObstacle = new component(40,50, "assets/görsel/pixel_door.png", 570,395,"image");
+        myObstacle2 = new component(40,30, "assets/görsel/cactus.png", 400,415,"image");
+        myBackground = new component(700, 500, "assets/görsel/Full-background.png", 0, 0, "image");
+    
+    
+    velocityY = 0;
+    isJumping = false;
+    obstacle2VelocityY = 0;
+    obstacle2IsJumping = false;
+    }
+    if (level==2) {
+        myGamePiece = new component(50, 50, "assets/görsel/sağakosma.png", 10, maxY, "image");
+        myObstacle = new component(40,50, "assets/görsel/pixel_door.png", 570,395,"image");
+        myObstacle2 = new component(40,30, "assets/görsel/cactus.png", 400,415,"image");
+        myBackground = new component(700, 500, "assets/görsel/Full-background.png", 0, 0, "image");
+        velocityY = 0;
+        isJumping = false;
+        obstacle2VelocityY = 0;
+        obstacle2IsJumping = false;
+    }
+    if(level==3){
+        currentScreen = "level1"; // level2 görünse de aynı ekran kullanılıyor
+        myGamePiece = new component(50, 50, "assets/görsel/sağakosma.png", 10, maxY, "image");
+        myObstacle = new component(40,50, "assets/görsel/pixel_door.png", 570,395,"image");
+        myObstacle2 = new component(40,30, "assets/görsel/cactus.png", 400,415,"image");
+        myBackground = new component(700, 500, "assets/görsel/Full-background.png", 0, 0, "image");
+        
+        velocityY = 0;
+        isJumping = false;
+        obstacle2VelocityY = 0;
+        obstacle2IsJumping = false;
+        obstacleVelocityX =1.5;
+        obstacleVelocityY=0;
+        obstacleIsJumping = false;
+        obstacleDirection=1;
+        }
+}
+function nextLevel() {
+    level++;
+    myGamePiece = new component(50, 50, "assets/görsel/sağakosma.png", 10, maxY, "image");
+    myObstacle = new component(40,50, "assets/görsel/pixel_door.png", 570,395,"image");
+    myObstacle2 = new component(40,30, "assets/görsel/cactus.png", 400,415,"image");
+    myBackground = new component(700, 500, "assets/görsel/Full-background.png", 0, 0, "image");
+    if (level==3) {
+        obstacleVelocityX = 1.5;
+        obstacleDirection = 1;
+        obstacleVelocity = 0;
+        obstacleIsJumping = false;
+    }
+    
+}
+function showStartScreen() {
+    const ctx = myGameArea.context;
+    ctx.drawImage(startImage, 0, 0, myGameArea.canvas.width, myGameArea.canvas.height);
+    ctx.fillStyle = "rgb(111, 181, 253)";
+    ctx.font = "70px Georgia, serif";
+    ctx.fillText("Reversal Rooms", 90, 90);
+}
+document.getElementById("startButton").addEventListener("click", function () {
+    currentScreen = "level1";
+    this.style.display = "none"; 
+    startGame();
+});
+function showGameOverScreen() { //Level 2 den sonra game over ekranının gelmesi için fonksiyon
+    const ctx = myGameArea.context;
+    ctx.drawImage(startImage, 0, 0, myGameArea.canvas.width, myGameArea.canvas.height);
+    
+    ctx.font = "40px Georgia, serif";
+    ctx.fillStyle = "rgb(111, 181, 253)";
+    ctx.fillText("OYNADIĞINIZ İÇİN", 90, 100);
+    ctx.fillText("TEŞEKKÜRLER!", 90, 150);
+    ctx.fillText("OYUN SONU... ", 90, 200);
+    mySound.pause();
+    mySound.currentTime = 0; 
+}
+startImage.onload = function () {
+    myGameArea.start(); 
+};
+
+    </script> 
+
+</body>
+</html>
