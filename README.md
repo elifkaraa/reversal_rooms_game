@@ -27,6 +27,12 @@ kapıya ulaştırmaya çalışır. Toplamda 3 seviyeden oluşan bu oyun kullanı
 Hangi nesnenin hangi hareketi yaptığını sen bulmalısın.  
 # Oyun İçi Görseller
 ![1.görsel](assets/görsel/ekran_goruntusu1.png)
+Level1 de sadece karakterimiz hareket ediyor. Engele değmeden kapıya ulaşılması gerekir.  
+![2.görsel](assets/görsel/ekran_goruntusu2.png)
+Level2 de hem karakerimiz hem de engel hareket ediyor. Kimin ne yaptığının bulunması ve karakterin kapıya ulaştırılması gerekir.
+![3.görsel](assets/görsel/ekran_goruntusu3.png)
+Level3 de ise kapı nesnesi hareket ediyor. Engele değmeden karakterin kapıya ulaştırılması gerekir.
+
 # Oynanış Videosu 
 Oynama videosuna alttaki linkten erişebilirsin:
 # Kullanılan Teknolojiler
