@@ -26,7 +26,7 @@ kapıya ulaştırmaya çalışır. Toplamda 3 seviyeden oluşan bu oyun kullanı
 ⬆️ Yukarı zıplama
 Hangi nesnenin hangi hareketi yaptığını sen bulmalısın.  
 # Oyun İçi Görseller
-![1.görsel]("Ekran görüntüsü 2025-05-23 221809.png")
+![1.görsel]("assets/görsel/Ekran görüntüsü 2025-05-23 221809.png")
 # Oynanış Videosu 
 Oynama videosuna alttaki linkten erişebilirsin:
 # Kullanılan Teknolojiler
