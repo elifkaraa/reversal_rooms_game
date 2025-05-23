@@ -3,13 +3,13 @@ Oyunun gerçek adı: Reversal Rooms Bağlantı linki https: https://taelsdafoox.
 Bu oyun javascript ve HTML5 canvas kullanarak oluşturulmuş Reversal Rooms'un mantığından esinlenerek tasarlanmış 2D bir oyun. Bu oyunda oyuncular, A'dan C ye sıralanmış odalar arasında bulmaca çözerek karakteri 
 kapıya ulaştırmaya çalışır. Toplamda 3 seviyeden oluşan bu oyun kullanıcıya farklı bir deneyim sunar. 
 # İçindekiler
- - Nasıl Oynanır?
+ - [Nasıl Oynanır?](#nasıl-oynanır)
  - Mekanikler
  - Oyun İçi Görseller
  - Oynanış Videosu
  - Kullanılan Teknolojiler
  - Varlıklar
- # Nasıl Oynanır?
+ ## Nasıl Oynanır?
 - Çevrimdışı Oynama
  
   Bir web tarayıcısında index.html dosyasını çalıştırmak yeterli olur.
