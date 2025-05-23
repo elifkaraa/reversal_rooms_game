@@ -10,8 +10,10 @@ kapıya ulaştırmaya çalışır. Toplamda 3 seviyeden oluşan bu oyun kullanı
  - Varlıklar
  # Nasıl Oynanır?
 - Çevrimdışı Oynama
+ 
   Bir web tarayıcısında index.html dosyasını çalıştırmak yeterli olur.
 - Çevrimiçi Oynama
+ 
   Online olarak tarayıcıda açmak için aşağıdaki linke tıklanması yeterli olur.
   https://elifkaraa.github.io/reversal_rooms_game/
 # Mekanikler
@@ -30,6 +32,7 @@ Oynama videosuna alttaki linkten erişebilirsin:
 
 # Varlıklar
 🔊 Ses Efektleri
-[ SoundBible](https://soundbible.com/free-sound-effects-3.html)
+[ SoundBible](https://soundbible.com/free-sound-effects-3.html)  
+
 🖼️ Görsel Varlıklar
 [Open-game-art.org](https://opengameart.org/content/)
