@@ -5,6 +5,7 @@ kapıya ulaştırmaya çalışır. Toplamda 3 seviyeden oluşan bu oyun kullanı
 # İçindekiler
  - Nasıl Oynanır?
  - Mekanikler
+ - Oyun İçi Görseller
  - Oynanış Videosu
  - Kullanılan Teknolojiler
  - Varlıklar
@@ -15,6 +16,7 @@ kapıya ulaştırmaya çalışır. Toplamda 3 seviyeden oluşan bu oyun kullanı
 - Çevrimiçi Oynama
  
   Online olarak tarayıcıda açmak için aşağıdaki linke tıklanması yeterli olur.
+  
   https://elifkaraa.github.io/reversal_rooms_game/
 # Mekanikler
 ⬅️ Sola hareket
@@ -22,7 +24,8 @@ kapıya ulaştırmaya çalışır. Toplamda 3 seviyeden oluşan bu oyun kullanı
 ➡️ Sağa hareket
 
 ⬆️ Yukarı zıplama
-Hangi nesnenin hangi hareketi yaptığını sen bulmalısın.
+Hangi nesnenin hangi hareketi yaptığını sen bulmalısın.  
+# Oyun İçi Görseller
 # Oynanış Videosu 
 Oynama videosuna alttaki linkten erişebilirsin:
 # Kullanılan Teknolojiler
